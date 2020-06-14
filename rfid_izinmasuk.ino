@@ -21,6 +21,7 @@ const int ledPIN2 = 6;  // UNTUK LED WARNA MERAH== GAGAL
 const int pingPin = A0;
 int jarak = 0;
 
+
 void setup() 
 {
   Serial.begin(9600); 
