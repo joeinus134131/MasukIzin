@@ -1,7 +1,7 @@
 /*
  * program untuk membuat keamanan rumah dan kostan 
  * bebasis RFID(radio frekuensi identifier)
- * Ditulis oleh : ScienceofGlory Algorithm Factory
+ * Ditulis oleh : IDNmakerspace Algorithm Factory
  */
 #include <SPI.h>
 #include <RFID.h>
