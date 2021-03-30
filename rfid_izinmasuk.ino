@@ -2,10 +2,10 @@
  * program untuk membuat keamanan rumah dan kostan 
  * bebasis RFID(radio frekuensi identifier)
  * Ditulis oleh : IDNmakerspace Algorithm Factory
+ * Rev.2 : 31 Maret 2021
  */
 #include <SPI.h>
 #include <RFID.h>
-#include <Servo.h>
 #include <LiquidCrystal_I2C.h>
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
@@ -13,22 +13,16 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 #define RST_PIN 9
 RFID rfid(SS_PIN,RST_PIN);
 
-Servo servoini;
-
-const int sudut = 90; // UNTUK MENENTUKAN SUDUT PUTAR SERVO
 const int ledPIN1 = 7; // UNTUK LED BERWARNA HIJAU== BERHASIL
 const int ledPIN2 = 6;  // UNTUK LED WARNA MERAH== GAGAL
-const int pingPin = A0;
-int jarak = 0;
-
+const int relaypin = 8;
 
 void setup() 
 {
-  Serial.begin(9600); 
-  servoini.attach(8);                      
+  Serial.begin(9600);                      
   pinMode(ledPIN1, OUTPUT);
   pinMode(ledPIN2, OUTPUT);
-  pinMode(pingPin, INPUT);
+  pinMode(relaypin, OUTPUT);
   delay(1000);
   SPI.begin();
   rfid.init();
@@ -55,7 +49,7 @@ void loop()
     }
     rfid.halt();
   } 
-  if(rfid.serNum[3]==127)
+  if(rfid.serNum[3]==127) //untuk code kartu yang anda punya/gunakan sesuaikan
   {
     
     Serial.println("BERHASIL ");
@@ -65,19 +59,10 @@ void loop()
     lcd.print("Silahkan Masuk");
     digitalWrite(ledPIN1, HIGH);
     digitalWrite(ledPIN2, LOW);
+    digitalWrite(relay, HIGH);  //membuka
     delay(1000);
 
-    int sudut = 0;
-    for (sudut = 0; sudut <= 180; sudut += 1)
-    { 
-      servoini.write(sudut);              
-      delay(15);                       
-    }
-    for (sudut = 180; sudut >= 0; sudut -= 1) 
-    { 
-      servoini.write(sudut);              
-      delay(15);                       
-    }
+  
   }
   else
   {
@@ -88,6 +73,7 @@ void loop()
     lcd.print("GAGAL");
     digitalWrite(ledPIN2, HIGH);
     digitalWrite(ledPIN1, LOW);
+    digitalWrite(relay, LOW);   //menutup
     delay(1000);
   }
 }
